@@ -6,8 +6,41 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <script src="js/resources.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/engine.js"></script>
+	<!-- game characters (sprites) for player to choose from -->
+	<img src="images/char-princess-girl.png">
+	<input name="char" type="radio" value="princess"> Principessa</input>
+
+	<img src="images/char-boy.png">
+	<input name="char" type="radio" value="boy"> Boynco</input>
+
+	<img src="images/char-cat-girl.png">
+	<input name="char" type="radio" value="cat"> Catanya</input>
+
+	<img src="images/char-horn-girl.png">
+	<input name="char" type="radio" value="horn"> Cornucapia</input>
+
+	<img src="images/char-pink-girl.png">
+	<input name="char" type="radio" value="pink"> Pinka</input>
+
+	<p><button id="start_game" name="start">Start game!</button></p>
+
+	<script type="text/JavaScript">
+	// listen for button click
+	document.getElementById("start_game").addEventListener("click", function(e){
+
+		// determine the character selected by the user
+		var selectedChar;
+		// search through radio buttons for active one
+		for (var i=0; i<document.getElementsByTagName("input").length; i++) {
+			if (document.getElementsByTagName("input")[i].checked) {
+				selectedChar = document.getElementsByTagName("input")[i].value;
+			}
+		}
+		// load the game page - pass player char as parameter
+		window.location = "game.html?"+selectedChar;
+		return false;
+	});
+	</script>
+
 </body>
 </html>
