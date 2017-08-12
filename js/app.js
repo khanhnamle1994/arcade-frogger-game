@@ -191,6 +191,34 @@ Player.prototype.handleInput = function (key) {
 
 
 /**
+ *  Pickup Subclass : GameObject
+ */
+var Pickup = function (xPos, yPos) {
+    var spriteURL = 'images/gem-blue.png';
+    this.active = true;
+    this.points = 100;
+    // create pickup as a non-moving gameobject
+    GameObject.call(this, xPos, yPos, 0, 0, 0, spriteURL);
+};
+// inherit GameObject's methods but point to Pickup's constructor
+Pickup.prototype = Object.create(GameObject.prototype);
+Pickup.prototype.constructor = Pickup;
+
+Pickup.prototype.update = function(deltaTime) {
+    if (this.active && this.collidedWith(player)) {
+        this.active = false;
+        gameController.score += this.points;
+    }
+};
+
+Pickup.prototype.render = function() {
+    if (this.active) {
+        ctx.drawImage (Resources.get(this.sprite), this.x, this.y);
+    }
+};
+
+
+/**
  *  Game Logic & Gamewide Properties
  */
 var GameController = function () {
@@ -259,3 +287,4 @@ switch (charName) {
 var gameController = new GameController();
 var player = gameController.spawnPlayer (spriteURL);
 var allEnemies = gameController.spawnEnemies (6);
+var pickups = [new Pickup(81,101)];

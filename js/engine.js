@@ -95,7 +95,12 @@ var Engine = (function(global) {
             allEnemies.forEach(function(enemy) {
                 enemy.update(dt);
             });
-            player.update();
+            player.update(dt);
+        }
+        if (typeof pickups != "undefined") {
+            pickups.forEach(function(pickup) {
+                pickup.update(dt);
+            });
         }
     }
 
@@ -153,8 +158,12 @@ var Engine = (function(global) {
             allEnemies.forEach(function(enemy) {
                 enemy.render();
             });
-
             player.render();
+        }
+        if (typeof pickups != "undefined") {
+            pickups.forEach(function(pickup){
+                pickup.render();
+            });
         }
     }
 
@@ -180,6 +189,14 @@ var Engine = (function(global) {
         'images/char-horn-girl.png',
         'images/char-pink-girl.png',
         'images/char-princess-girl.png',
+        'images/gem-blue.png',
+        'images/gem-gold.png',
+        'images/gem-green.png',
+        'images/heart.png',
+        'images/key.png',
+        'images/rock.png',
+        'images/selector.png',
+        'images/star.png'
     ]);
     Resources.onReady(init);
 
