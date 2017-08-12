@@ -44,13 +44,13 @@ GameObject.prototype.respawn = function () {
 };
 
 // Check for "collision" (close x,y position)
-GameObject.prototype.collidedWith = function(obj) {
+GameObject.prototype.collidedWith = function(obj,radius) {
     // set detection radius
-    var collisionSensitivity = 25;
+    var sensitivity = radius;
 
     // see if other object's x and y distance falls within radius
-    if (Math.abs(this.x - obj.x) < collisionSensitivity) {
-        if (Math.abs(this.y - obj.y) < collisionSensitivity) {
+    if (Math.abs(this.x - obj.x) < sensitivity) {
+        if (Math.abs(this.y - obj.y) < sensitivity) {
             return true;    // collision
         }
     }
@@ -108,7 +108,7 @@ Enemy.prototype.update = function(deltaTime) {
     this.move (deltaTime);
 
     // check for player collision
-    this.collidedWith(player) ? player.die() : 0;
+    this.collidedWith(player,25) ? player.die() : 0;
 
     // respawn if enemy moves outside screen
     this.outOfBounds() ? this.respawn() : 0;
@@ -160,7 +160,7 @@ Player.prototype.win = function () {
 
 // Admit defeat
 Player.prototype.die = function () {
-    document.getElementById("game_notes").innerHTML = "Back to 0 : BUGGED!";
+    document.getElementById("game_notes").innerHTML = "Back to 0 : HIT!";
     gameController.score = 0;
     this.respawn();
 }
@@ -194,18 +194,25 @@ Player.prototype.handleInput = function (key) {
  *  Pickup Subclass : GameObject
  */
 var Pickup = function (xPos, yPos) {
-    var spriteURL = 'images/gem-blue.png';
+    // list of sprites and point values
+    var sprites = ['images/gem-green.png','images/gem-blue.png','images/gem-gold.png'];
+    var values = [5,10,20];
+    // random value for choosing from above lists
+    var choice = Math.floor(Math.random()*3);
+
+    // properties
     this.active = true;
-    this.points = 100;
+    this.points = values[choice];
+
     // create pickup as a non-moving gameobject
-    GameObject.call(this, xPos, yPos, 0, 0, 0, spriteURL);
+    GameObject.call(this, xPos, yPos, 0, 0, 0, sprites[choice]);
 };
 // inherit GameObject's methods but point to Pickup's constructor
 Pickup.prototype = Object.create(GameObject.prototype);
 Pickup.prototype.constructor = Pickup;
 
 Pickup.prototype.update = function(deltaTime) {
-    if (this.active && this.collidedWith(player)) {
+    if (this.active && this.collidedWith(player,55)) {
         this.active = false;
         gameController.score += this.points;
     }
@@ -258,9 +265,20 @@ GameController.prototype.spawnEnemies = function (enemyCount) {
     return enemies;
 };
 
+// Instantiate pickup objects in an array
+GameController.prototype.spawnPickups = function () {
+    var pickups = new Array();
+
+    // spawn between 1 and 3 pickups
+    for (var i=0; i < Math.floor(Math.random()*3+1); i++) {
+        pickups.push (new Pickup(Math.random()*400+10,Math.random()*200+50));
+    }
+    return pickups;
+};
+
 
 /**
- *  Init 1 Game Session
+ *  Init Single Game Session
  */
 
 // choose player sprite based on URL param passed from index.html
@@ -287,4 +305,4 @@ switch (charName) {
 var gameController = new GameController();
 var player = gameController.spawnPlayer (spriteURL);
 var allEnemies = gameController.spawnEnemies (6);
-var pickups = [new Pickup(81,101)];
+var pickups = gameController.spawnPickups();
