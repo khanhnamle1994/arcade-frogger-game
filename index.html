@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+	<h1 style="font-family: Helvetica,sans-serif; color:orange; font-size: 50px;">Avoid Bug! Touch Water!!</h1>
+	<h2 style="color:gray;"><em>a game by Udacity and Botmasher (Joshua R)</em></h2>
+
 	<!-- game characters (sprites) for player to choose from -->
 	<img src="images/char-princess-girl.png">
 	<input name="char" type="radio" value="princess"> Principessa</input>
@@ -22,7 +25,8 @@
 	<img src="images/char-pink-girl.png">
 	<input name="char" type="radio" value="pink"> Pinka</input>
 
-	<p><button id="start_game" name="start">Start game!</button></p>
+	<br><br>
+	<p><button id="start_game" name="start">Start up this game!</button></p>
 
 	<script type="text/JavaScript">
 	// listen for button click
@@ -36,6 +40,7 @@
 				selectedChar = document.getElementsByTagName("input")[i].value;
 			}
 		}
+
 		// load the game page - pass player char as parameter
 		window.location = "game.html?"+selectedChar;
 		return false;

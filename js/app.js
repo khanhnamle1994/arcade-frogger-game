@@ -27,11 +27,11 @@ GameObject.prototype.render = function() {
 GameObject.prototype.move = function (deltaTime) {
     // update location this frame
     if (this instanceof Player) {
-        // player movement decoupled from deltaTime (causes no-show)
-        this.x += this.horiz * this.speed;
-        this.y += this.vert * this.speed;
+        // discrete player movement (space-by-space) decoupled from deltaTime
+        this.x += this.horiz * 101;
+        this.y += this.vert * 83;
     } else {
-        // standard movement along axes at speed smoothed by time
+        // continuous movement along axes at speed smoothed by time
         this.x += this.horiz * this.speed * deltaTime;
         this.y += this.vert * this.speed * deltaTime;
     }
@@ -128,8 +128,8 @@ Player.prototype.constructor = Player;
 
 // Player behavior loop
 Player.prototype.update = function(deltaTime) {
-    // update location
-    this.move (deltaTime);
+    // update location (axes are only non-zero for 1 frame on key press)
+    //this.move (deltaTime);
 
     // end zone win condition check
     this.reachedGoal() ? this.win() : 0;
@@ -139,6 +139,9 @@ Player.prototype.update = function(deltaTime) {
 
     // show the current score
     console.log ("Score: "+gameController.score);
+
+    // reset the movement axes
+    this.horiz = 0, this.vert = 0;
 };
 
 // Check if player made it to the top of the screen
@@ -183,6 +186,7 @@ Player.prototype.handleInput = function (key) {
             this.vert = 1;
             break;
     }
+    this.move(0.0);
 };
 
 
@@ -226,19 +230,32 @@ GameController.prototype.spawnEnemies = function (enemyCount) {
     return enemies;
 };
 
+
+/**
+ *  Init 1 Game Session
+ */
+
 // choose player sprite based on URL param passed from index.html
 var charName = window.location.search.substring(1);
-if (charName == 'zq123') {
-    // why aren't other images working?
-    /*
-    Failed to execute 'drawImage' on 'CanvasRenderingContext2D': The provided value is not of type '(HTMLImageElement or HTMLVideoElement or HTMLCanvasElement or ImageBitmap)'
-    */
-    var spriteURL = 'images/char-princess-girl.png';
-} else {
-    var spriteURL = 'images/char-boy.png';
+switch (charName) {
+    case 'cat':
+        var spriteURL = 'images/char-cat-girl.png';
+        break;
+    case 'horn':
+        var spriteURL = 'images/char-horn-girl.png';
+        break;
+    case 'pink':
+        var spriteURL = 'images/char-pink-girl.png';
+        break;
+    case 'princess':
+        var spriteURL = 'images/char-princess-girl.png';
+        break;
+    default:
+        var spriteURL = 'images/char-boy.png'
+        break;
 }
 
 // start game through game controller
 var gameController = new GameController();
-var player = gameController.spawnPlayer(spriteURL);
-var allEnemies = gameController.spawnEnemies(6);
+var player = gameController.spawnPlayer (spriteURL);
+var allEnemies = gameController.spawnEnemies (6);
