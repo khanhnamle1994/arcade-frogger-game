@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Effective JavaScript: Frogger</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<h1 id="title">Avoid Bug! Touch Water!!</h1>
+
+	<div style="margin:0;padding:0; font-size:40px;">FINAL SCORE<br>
+		<span id="score" style="color:blue;"></span>
+	</div>
+
+	<p><a href="index.html">Play again?</a><p>
+
+	<script type="text/JavaScript">
+	// get score passed from app.js (Player.die()) in URL parameter
+	var playerScore = window.location.search.substring(1);
+	// display score in page element
+	document.getElementById("score").innerHTML = playerScore;
+	// play some music
+	var music = new Audio('audio/music1.mp3');
+	music.play();
+	</script>
+
+</body>
+</html>

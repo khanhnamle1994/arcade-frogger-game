@@ -119,6 +119,7 @@ Enemy.prototype.update = function(deltaTime) {
  *  Main Player Subclass : GameObject
  */
 var Player = function (x, y, velocity, spriteURL) {
+    this.lives = 3;
     GameObject.call (this, x, y, velocity, 0, 0, spriteURL)
 };
 // delegate methods up the chain to GameObject
@@ -144,26 +145,60 @@ Player.prototype.update = function(deltaTime) {
     this.horiz = 0, this.vert = 0;
 };
 
+Player.prototype.displayLives = function() {
+    heartImg = "<img src='images/heart.png'>";
+    document.getElementById("game_lives").innerHTML = "";
+    for (var i = 0; i < this.lives; i++) {
+        document.getElementById("game_lives").innerHTML += heartImg;
+    }
+};
+
 // Check if player made it to the top of the screen
 Player.prototype.reachedGoal = function () {
-    if (this.y < 0) {
+    if (this.y < 10) {
         return true;
     } return false;
-}
+};
 
 // Declare victory
 Player.prototype.win = function () {
+
+    // notify the div
     document.getElementById("game_notes").innerHTML = "+10 : Reached Water!";
+
+    // play goal sfx
+    var sfx = new Audio('audio/goal.wav');
+
+    sfx.play();
     gameController.score += 10;
     this.respawn();
-}
+};
 
 // Admit defeat
 Player.prototype.die = function () {
-    document.getElementById("game_notes").innerHTML = "Back to 0 : HIT!";
-    gameController.score = 0;
-    this.respawn();
-}
+
+    document.getElementById("game_notes").innerHTML = "-30 : OUCH!";
+    if (gameController.score > 30) {
+        gameController.score -= 30;
+    } else {
+        gameController.score = 0;
+    }
+
+    // update how many hearts player has left
+    this.lives --;
+    this.displayLives();
+
+    // play hit fx
+    var sfx = new Audio('audio/hit.wav');
+    sfx.play();
+
+    // check if the player lost all lives or is still alive
+    if (this.lives <= 0) {
+        window.location = "gameover.html?"+gameController.score;
+    } else {
+        this.respawn();
+    }
+};
 
 // Take keyboard input from event listener added by GameController
 Player.prototype.handleInput = function (key) {
@@ -212,9 +247,14 @@ Pickup.prototype = Object.create(GameObject.prototype);
 Pickup.prototype.constructor = Pickup;
 
 Pickup.prototype.update = function(deltaTime) {
+    // check if player picked up active gem
     if (this.active && this.collidedWith(player,55)) {
         this.active = false;
         gameController.score += this.points;
+        document.getElementById("game_notes").innerHTML = "+"+this.points+"! What a GEM!";
+        // play sfx
+        var sfx = new Audio('audio/gem.wav');
+        sfx.play();
     }
 };
 
@@ -304,5 +344,10 @@ switch (charName) {
 // start game through game controller
 var gameController = new GameController();
 var player = gameController.spawnPlayer (spriteURL);
+player.displayLives();
 var allEnemies = gameController.spawnEnemies (6);
 var pickups = gameController.spawnPickups();
+
+// play some bg music
+var music = new Audio('audio/music0.mp3');
+music.play();

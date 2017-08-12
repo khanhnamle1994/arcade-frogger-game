@@ -7,7 +7,7 @@
 </head>
 <body>
 	<h1 id="title">Avoid Bug! Touch Water!!</h1>
-	<h2 id="sub">a game by Udacity and Botmasher (Joshua R)</h2>
+	<h2 id="sub">a game by <a href="https://classroom.udacity.com/courses/ud015/lessons/3072058665/concepts/31018886370923">Udacity</a> and <a href="https://www.github.com/Botmasher/">Botmasher (Joshua R)</a></h2>
 
 	<!-- game characters (sprites) for player to choose from -->
 	<img src="images/char-princess-girl.png">
@@ -28,7 +28,17 @@
 	<br><br>
 	<p><button id="start_game" name="start">Start up this game!</button></p>
 
+	<p>
+	Art and basic engine from Udacity. Gameplay by Botmasher (Joshua R).
+	<br>
+	Music by Kevin MacLeod (incompetech.com) and Jason Shaw (audionautix.com).
+	</p>
+
 	<script type="text/JavaScript">
+	// play some music
+	var music = new Audio('audio/music2.mp3');
+	music.play();
+
 	// listen for button click
 	document.getElementById("start_game").addEventListener("click", function(e){
 
