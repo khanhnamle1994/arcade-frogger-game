@@ -102,6 +102,9 @@ var Engine = (function(global) {
                 pickup.update(dt);
             });
         }
+        if (typeof gameController != "undefined") {
+            gameController.update(dt);
+        }
     }
 
     /* This function initially draws the "game level", it will then call
@@ -164,6 +167,9 @@ var Engine = (function(global) {
             pickups.forEach(function(pickup){
                 pickup.render();
             });
+        }
+        if (typeof gameController != "undefined") {
+            gameController.render();
         }
     }
 

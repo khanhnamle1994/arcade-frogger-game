@@ -272,6 +272,13 @@ var GameController = function () {
     // properties
     this.score = 0;
 
+    // goal door allowing player to escape on own terms
+    this.goalX = 1;
+    this.goalY = 375;
+    this.goalPoints = 100;
+    this.goalOpen = false;
+    this.goal = 'images/selector.png';
+
     // listen for keypress and send to Player's handleInput(key)
     document.addEventListener('keyup', function(e) {
         var allowedKeys = {
@@ -283,6 +290,35 @@ var GameController = function () {
         player.handleInput(allowedKeys[e.keyCode]);
     });
 
+};
+
+// ongoing actions once per frame
+GameController.prototype.update = function (deltaTime) {
+    // check that goal door is open
+    if (this.score >= this.goalPoints && !this.goalOpen) {
+        this.goalOpen = true;
+        document.getElementById("game_notes").innerHTML = "+100 - IF you go through my door and end this!";
+        var sfx = new Audio("audio/door.wav");
+        sfx.play();
+    }
+
+    if (this.goalOpen) {
+        // check for player reaching goal
+        if (Math.abs(player.x-this.goalX) < 25 && Math.abs(player.y-this.goalY) < 25) {
+            // end game on a high note
+            this.score += 100;
+            player.lives = 0;
+            player.die();
+        }
+    }
+
+};
+
+GameController.prototype.render = function () {
+    // draw goal door once player reaches points
+    if (this.score >= this.goalPoints) {
+        ctx.drawImage (Resources.get(this.goal), this.goalX, this.goalY);
+    }
 };
 
 // Instantiate the player object
