@@ -1,3 +1,26 @@
 body {
     text-align: center;
+    font-family: Helvetica, sans-serif;
+    color: gray;
+}
+
+/* index.html */
+h1#title {
+	color: #777FFF;
+	font-size: 42px;
+}
+
+h2#sub {
+	font-style: italic;
+	font-size: 20px;
+}
+
+/* game.html */
+#game_score {
+	font-weight: bold;
+}
+
+#game_notes {
+	color: gray;
+	margin: 20px 0 -20px 0;
 }

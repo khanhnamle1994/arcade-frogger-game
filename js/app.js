@@ -128,8 +128,8 @@ Player.prototype.constructor = Player;
 
 // Player behavior loop
 Player.prototype.update = function(deltaTime) {
-    // update location (axes are only non-zero for 1 frame on key press)
-    //this.move (deltaTime);
+
+    // movement checked and updated through Player.handleInput
 
     // end zone win condition check
     this.reachedGoal() ? this.win() : 0;
@@ -138,7 +138,7 @@ Player.prototype.update = function(deltaTime) {
     this.outOfBounds() ? this.die() : 0;
 
     // show the current score
-    console.log ("Score: "+gameController.score);
+    document.getElementById("game_score").innerHTML = "Score: "+gameController.score;
 
     // reset the movement axes
     this.horiz = 0, this.vert = 0;
@@ -153,14 +153,14 @@ Player.prototype.reachedGoal = function () {
 
 // Declare victory
 Player.prototype.win = function () {
-    console.log ("You win!");
+    document.getElementById("game_notes").innerHTML = "+10 : Reached Water!";
     gameController.score += 10;
     this.respawn();
 }
 
 // Admit defeat
 Player.prototype.die = function () {
-    console.log ("You didn't make it!");
+    document.getElementById("game_notes").innerHTML = "Back to 0 : BUGGED!";
     gameController.score = 0;
     this.respawn();
 }
